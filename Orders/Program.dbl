@@ -31,11 +31,11 @@ main Orders
 		max             ,i4,3       ;Maximum detail records currently supported
 	endrecord
 
-porc
+proc
 
-	xcall startup
-	xcall process
-	xcall shutdown
+	call startup
+	call process
+	call shutdown
 
 	stop
 
@@ -166,7 +166,7 @@ Order_header,
 		else
 		begin
 			xcall input(header_id,4,20,oh_customer,1)
-			xcall input(header_id,5,20,oh_date,,,1)
+			xcall input(header_id,5,20,oh_date,1)
 			xcall input(header_id,6,20,oh_contact,1)
 			xcall input(header_id,7,20,oh_salesrep,1)
 
@@ -225,7 +225,7 @@ Order_detail,
 		end
 
 		xcall input(detail_id,4,15,^m(strDetail[count].od_qty,m_handle),1)
-		xcall input(detail_id,5,15,^m(strDetail[count].od_unitprice,m_handle),1)
+		xcall input(detail_id,5,15,^m(strDetail[count].od_unit_price,m_handle),1)
 
 		^m(strDetail[count].od_number,m_handle)=oh_number
 		^m(strDetail[count].od_item,m_handle)=count
@@ -258,7 +258,7 @@ View_order,
 	xcall display_text(header_id,4,2,"Customer account:")
 	xcall display_text(header_id,5,2,"      Order date:")
 	xcall display_text(header_id,6,2,"       Placed by:")
-	xcall display_text(heeder_id,7,2,"       Sales rep:")
+	xcall display_text(header_id,7,2,"       Sales rep:")
 
 	repeat
 	begin
