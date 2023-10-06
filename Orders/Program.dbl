@@ -28,7 +28,7 @@ main Orders
 	record
 		m_handle        ,i4         ;Dynamic memory handle
 		count           ,i4,0       ;Number of detail records currently in dynamic memory
-		max             ,i4,3       ;Maximum detail records currently supported
+		max             ,i4,4       ;Maximum detail records currently supported
 	endrecord
 
 proc
@@ -212,25 +212,38 @@ Order_detail,
 
 	repeat
 	begin
-
+		if count < 4
+			then
+			begin
 		incr count
 		xcall s_bld(temp,,"Order Detail (Entering item %d of %d)",count,max)
 		xcall w_brdr(detail_id,WB_TITLE,%atrim(temp))
 
+		
+		
 		xcall input(detail_id,2,15,^m(strDetail[count].od_part,m_handle))
-		if ^m(strDetail[count].od_part,m_handle).eqs.""
+		if ^m(strDetail[count].od_part,m_handle).eqs."" 
+
 		begin
 			decr count
 			exitloop
-		end
-
+			end
+		
+			
 		xcall input(detail_id,4,15,^m(strDetail[count].od_qty,m_handle),1)
 		xcall input(detail_id,5,15,^m(strDetail[count].od_unit_price,m_handle),1)
 
 		^m(strDetail[count].od_number,m_handle)=oh_number
-		^m(strDetail[count].od_item,m_handle)=count
+		^m(strDetail[count].od_item,m_handle)=count+1
+		
+		end
+		
+		else begin
+		
+		exitloop
+		end 
 
-		xcall clear_box(detail_id,2,15,5,60)
+
 	end
 
 	xcall delete_window(detail_id)
@@ -243,7 +256,7 @@ Order_detail,
 ;
 Extend_dynamic_memory,
 
-	max=max+3
+	max=max+1
 	m_handle=%mem_proc(DM_RESIZ,(^size(strDetail)*max),m_handle)
 
 	return
@@ -262,6 +275,7 @@ View_order,
 
 	repeat
 	begin
+
 
 		xcall input(header_id,2,20,oh_number)
 
