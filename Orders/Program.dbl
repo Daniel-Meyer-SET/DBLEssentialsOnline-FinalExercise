@@ -282,10 +282,16 @@ View_order,
 		if oh_number.eq.0
 			exitloop
 
-		if (%file_access(FileOp.ReadNext,hchan,header,oh_number).ne.FileResult.OK) then
+		if (%file_access(FileOp.Find,hchan,header,oh_number).ne.FileResult.OK) then
 			xcall display_message("Order not found!")
 		else
 		begin
+
+			if (%file_access(FileOp.Read,hchan,header,oh_number).ne.FileResult.OK) 
+			then 
+				xcall display_message("Order not found!")
+			else
+				begin
 			data keyPressed, a1
 
 			xcall display_text(header_id,4,20,oh_customer)
@@ -293,13 +299,13 @@ View_order,
 			xcall display_text(header_id,6,20,oh_contact)
 			xcall display_text(header_id,7,20,^a(oh_salesrep))
 
-			xcall display_text(header_id,9,2,"Press RETURN to view order details: ")
+			xcall display_text(header_id,9 ,2,"Press RETURN to view order details: ")
 			xcall wait_key(header_id,9,38,keyPressed)
 
 			call view_order_detail
 
 			xcall clear_box(header_id,4,20,9,60)
-
+				end
 		end
 	end
 
