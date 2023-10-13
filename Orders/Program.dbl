@@ -28,7 +28,7 @@ main Orders
 	record
 		m_handle        ,i4         ;Dynamic memory handle
 		count           ,i4,0       ;Number of detail records currently in dynamic memory
-		max             ,i4,4       ;Maximum detail records currently supported
+		max             ,i4,3       ;Maximum detail records currently supported
 	endrecord
 
 proc
@@ -212,7 +212,7 @@ Order_detail,
 
 	repeat
 	begin
-		if count < 4
+		if count < 3
 			then
 			begin
 		incr count
@@ -234,7 +234,7 @@ Order_detail,
 		xcall input(detail_id,5,15,^m(strDetail[count].od_unit_price,m_handle),1)
 
 		^m(strDetail[count].od_number,m_handle)=oh_number
-		^m(strDetail[count].od_item,m_handle)=count+1
+		^m(strDetail[count].od_item,m_handle)=count
 		
 		end
 		
